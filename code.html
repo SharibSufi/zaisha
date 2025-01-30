@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>For My Zainu 💍</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ffe6eb 0%, #ffb6c1 100%);
+            overflow: hidden;
+            font-family: 'Pacifico', cursive;
+        }
+
+        .click-container {
+            position: absolute;
+            text-align: center;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        #initialHeart {
+            font-size: 68px;
+            color: #FF3366;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            animation: pulse 2s infinite;
+        }
+
+        #clickText {
+            color: #FF3366;
+            font-size: 1.5em;
+            margin-top: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Tree styles */
+        .tree-trunk {
+            position: absolute;
+            right: 20%;
+            bottom: 0;
+            width: 50px;
+            height: 0;
+            background: linear-gradient(to right, #2d1a0f 0%, #4a3123 30%, #2d1a0f 100%);
+            border-radius: 20px;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.2);
+            transform-origin: bottom;
+        }
+
+        .tree-branch {
+            position: absolute;
+            background: linear-gradient(to bottom, #2d1a0f 0%, #4a3123 100%);
+            border-radius: 10px;
+            transform-origin: bottom;
+        }
+
+        .heart {
+            position: absolute;
+            opacity: 0.9;
+            pointer-events: none;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+        }
+
+        .content-left {
+            position: absolute;
+            left: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30%;
+            padding: 30px;
+            background: linear-gradient(135deg, #fff5f6, #ffe4e8);  /* Soft pink-white gradient */
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(255, 51, 102, 0.08);  /* Kept subtle shadow */
+            z-index: 10;
+        }
+
+        .floating-element {
+            position: absolute;
+            pointer-events: none;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            z-index: 2;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .music-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 51, 102, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+</head>
+<body>
+    <audio id="bgMusic" loop>
+        <source src="Blue-Yung-Kai.mp3" type="audio/mp3">
+    </audio>
+    <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</button>
+
+    <div id="container">
+        <div class="click-container">
+            <div id="initialHeart">❤️</div>
+            <div id="clickText">Click Me Babyy</div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script>
+        const container = document.getElementById('container');
+        const heartColors = ['#ff69b4', '#ff3366', '#ff99c8', '#ffb347'];
+        let phase = 0;
+        let isPlaying = false;
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+
+        document.querySelector('.click-container').addEventListener('click', function() {
+            if (!isPlaying) {
+                toggleMusic();
+            }
+            startJourney();
+        });
+
+        function startJourney() {
+            if (phase === 0) {
+                container.innerHTML = '';
+                createFallingHeart();
+                phase = 1;
+            }
+        }
+
+        function createFallingHeart() {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.style.position = 'absolute';
+            heart.style.left = '50%';
+            heart.style.transform = 'translateX(-50%)';
+            heart.style.fontSize = '50px';
+            heart.style.color = '#ff3366';
+            container.appendChild(heart);
+
+            anime({
+                targets: heart,
+                top: '110%',
+                rotate: '360deg',
+                duration: 1200,
+                easing: 'easeInQuad',
+                complete: () => {
+                    heart.remove();
+                    growOurTree();
+                }
+            });
+        }
+
+        function growOurTree() {
+            createTulipAndScene();
+            setTimeout(() => {
+                createMemorySection();
+            }, 1000);
+        }
+
+        function createTulipAndScene() {
+            const tulip = document.createElement('img');
+            tulip.src = 'pngegg.png'; // Your tulip image
+            tulip.style.position = 'absolute';
+            tulip.style.right = '20%';
+            tulip.style.bottom = '0';
+            tulip.style.height = '0';
+            tulip.style.maxHeight = '630px';  // Increased from 450px
+            tulip.style.zIndex = '1';
+            container.appendChild(tulip);
+
+            anime({
+                targets: tulip,
+                height: '630px',  // Increased from 450px
+                duration: 2500,
+                easing: 'easeOutElastic(1, .5)',
+                complete: () => {
+                    createFloatingElements();
+                }
+            });
+        }
+
+        function createFloatingElements() {
+            const zones = {
+                right: { x: [70, 95], y: [10, 90] },    // Moved right zone further right
+                left: { x: [5, 30], y: [10, 90] },      // Moved left zone further left
+                top: { x: [10, 90], y: [5, 25] },       // Reduced height of top zone
+                bottom: { x: [10, 90], y: [75, 95] }    // Increased starting point of bottom zone
+            };
+
+            // Define the glass panel zone to avoid
+            const avoidZone = { x: [0, 40], y: [30, 70] };  // Expanded avoid zone around glass panel
+
+            // Create butterflies with strict position checking
+            for(let i = 0; i < 40; i++) {
+                const zone = chooseZone(zones);
+                // Only create butterfly if it's well clear of the avoid zone
+                if (!isInAvoidZone(zone, avoidZone)) {
+                    createFloatingElement(true, zone);
+                }
+            }
+
+            // Create hearts with same position checking
+            for(let i = 0; i < 100; i++) {
+                const zone = chooseZone(zones);
+                if (!isInAvoidZone(zone, avoidZone)) {
+                    createFloatingElement(false, zone);
+                }
+            }
+        }
+
+        function isInAvoidZone(position, avoidZone) {
+            const x = position.x[0];
+            const y = position.y[0];
+            // Added extra margin to ensure elements stay well clear
+            return (x >= avoidZone.x[0] && x <= avoidZone.x[1] &&
+                   y >= avoidZone.y[0] && y <= avoidZone.y[1]);
+        }
+
+        function chooseZone(zones) {
+            const zoneKeys = Object.keys(zones);
+            return zones[zoneKeys[Math.floor(Math.random() * zoneKeys.length)]];
+        }
+
+        function createFloatingElement(isButterfly, zone) {
+            const element = document.createElement('div');
+            element.className = 'floating-element';
+            
+            if (isButterfly) {
+                element.innerHTML = '🦋';
+                element.style.fontSize = `${20 + Math.random() * 15}px`;
+                // Add varying transparency to butterflies
+                element.style.opacity = 0.3 + Math.random() * 0.7;
+            } else {
+                const heartEmojis = ['❤️', '💖', '💝', '💗', '💓'];
+                const heartColors = ['#ff69b4', '#ff3366', '#ff99c8', '#ffb347', '#ff6b6b'];
+                element.innerHTML = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                element.style.fontSize = `${8 + Math.random() * 8}px`; // Smaller hearts
+                element.style.opacity = 0.3 + Math.random() * 0.7;
+                element.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
+            }
+
+            // Position within designated zone
+            element.style.position = 'absolute';
+            element.style.left = `${zone.x[0] + Math.random() * (zone.x[1] - zone.x[0])}%`;
+            element.style.top = `${zone.y[0] + Math.random() * (zone.y[1] - zone.y[0])}%`;
+            element.style.zIndex = '2';
+
+            container.appendChild(element);
+
+            // Enhanced animation for butterflies
+            if (isButterfly) {
+                anime({
+                    targets: element,
+                    translateX: [
+                        { value: -30, duration: 2000 },
+                        { value: 30, duration: 2000 }
+                    ],
+                    translateY: [
+                        { value: -20, duration: 1000 },
+                        { value: 20, duration: 1000 }
+                    ],
+                    rotate: [
+                        { value: -15, duration: 1000 },
+                        { value: 15, duration: 1000 }
+                    ],
+                    direction: 'alternate',
+                    loop: true,
+                    easing: 'easeInOutSine',
+                    delay: Math.random() * 1000
+                });
+            } else {
+                // Gentler animation for hearts
+                anime({
+                    targets: element,
+                    translateX: [
+                        { value: -10, duration: 1500 },
+                        { value: 10, duration: 1500 }
+                    ],
+                    translateY: [
+                        { value: -8, duration: 1000 },
+                        { value: 8, duration: 1000 }
+                    ],
+                    rotate: [
+                        { value: -5, duration: 1500 },
+                        { value: 5, duration: 1500 }
+                    ],
+                    direction: 'alternate',
+                    loop: true,
+                    easing: 'easeInOutSine',
+                    delay: Math.random() * 1000
+                });
+            }
+        }
+
+        function createMemorySection() {
+            const memoryDiv = document.createElement('div');
+            memoryDiv.className = 'content-left';
+            memoryDiv.innerHTML = `
+                <div style="color: #ff3366; font-size: 2.2em; margin-bottom: 30px;">
+                    Ek Dusre Ki Jaan since... 🌟
+                </div>
+                <div id="countdown" style="
+                    background: rgba(255, 255, 255, 0.3);
+                    padding: 20px;
+                    border-radius: 15px;
+                    box-shadow: 0 4px 15px rgba(255, 51, 102, 0.2);
+                    backdrop-filter: blur(5px);
+                    margin: 20px 0;
+                "></div>
+                <div id="loveLetter" style="margin-top: 40px; font-size: 1.3em; color: #ff3366;"></div>
+            `;
+            container.appendChild(memoryDiv);
+
+            startOurTimer();
+            writeLoveLetter();
+        }
+
+        function startOurTimer() {
+            function updateTimer() {
+                const target = new Date('2024-10-15');
+                const now = new Date();
+                const diff = Math.abs(target - now); // Added Math.abs() to get positive values
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('countdown').innerHTML = `
+                    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <div style="text-align: center;">
+                            <div style="
+                                background: rgba(255, 51, 102, 0.9);
+                                color: white;
+                                padding: 10px 15px;
+                                border-radius: 10px;
+                                font-size: 2em;
+                                min-width: 60px;
+                                box-shadow: 0 4px 10px rgba(255, 51, 102, 0.3);
+                            ">${Math.abs(days)}</div>
+                            <div style="color: #ff3366; margin-top: 5px; font-size: 0.9em;">Days</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="
+                                background: rgba(255, 51, 102, 0.9);
+                                color: white;
+                                padding: 10px 15px;
+                                border-radius: 10px;
+                                font-size: 2em;
+                                min-width: 60px;
+                                box-shadow: 0 4px 10px rgba(255, 51, 102, 0.3);
+                            ">${Math.abs(hours)}</div>
+                            <div style="color: #ff3366; margin-top: 5px; font-size: 0.9em;">Hours</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="
+                                background: rgba(255, 51, 102, 0.9);
+                                color: white;
+                                padding: 10px 15px;
+                                border-radius: 10px;
+                                font-size: 2em;
+                                min-width: 60px;
+                                box-shadow: 0 4px 10px rgba(255, 51, 102, 0.3);
+                            ">${Math.abs(minutes)}</div>
+                            <div style="color: #ff3366; margin-top: 5px; font-size: 0.9em;">Minutes</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="
+                                background: rgba(255, 51, 102, 0.9);
+                                color: white;
+                                padding: 10px 15px;
+                                border-radius: 10px;
+                                font-size: 2em;
+                                min-width: 60px;
+                                box-shadow: 0 4px 10px rgba(255, 51, 102, 0.3);
+                            ">${Math.abs(seconds)}</div>
+                            <div style="color: #ff3366; margin-top: 5px; font-size: 0.9em;">Seconds</div>
+                        </div>
+                    </div>
+                `;
+            }
+            setInterval(updateTimer, 1000);
+            updateTimer();
+        }
+
+        function writeLoveLetter() {
+            const letterElement = document.getElementById('loveLetter');
+            letterElement.style.cssText = `
+                text-align: center;
+                font-family: 'Pacifico', cursive;
+                font-size: 1.3em;
+                color: #ff3366;
+                line-height: 1.8;
+                margin-top: 40px;
+                text-shadow: 2px 2px 4px rgba(255, 51, 102, 0.3);
+                background: linear-gradient(45deg, #ff3366, #ff6b6b);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                filter: drop-shadow(2px 2px 4px rgba(255, 51, 102, 0.2));
+                letter-spacing: 1px;
+            `;
+            
+            letterElement.innerHTML = "ZAINU MERI JAAN ever since we met i've been the happiest. I still remember the day i laid my eyes on you baby i still remember the smile on my face and the love that started flowing in my heart and from that moment my love for you has been increasing and growing alhumdulilah YOU'RE THE BEST WIFEE EVERRR MERI JAAAN and i love every moment we spend together💞 sooo i wanted to ask youu...";
+
+            // Create the Next button
+            const nextButton = document.createElement('button');
+            nextButton.textContent = '🫶🏻'; // Use textContent to set the button text
+            nextButton.style.cssText = `
+                background: #ff69b4; 
+                color: white; 
+                padding: 3px 8px;  // Reduced padding for a smaller button
+                border: none; 
+                border-radius: 5px; 
+                cursor: pointer; 
+                font-size: 0.7em;   // Reduced font size
+                position: relative;   // Changed to relative positioning
+                margin-left: 10px;    // Added margin to position next to the text
+                z-index: 1000;       // Ensured it appears above other elements
+                display: none;       // Initially hidden
+                box-shadow: 0 0 5px rgba(255, 255, 255, 1), 0 0 10px rgba(255, 255, 255, 0.5); // Glow effect
+            `;
+            nextButton.onclick = () => {
+                container.innerHTML = ''; // Clear the container
+                createFinalQuestion(); // Call the next animation
+            };
+
+            // Append the button to the letter element
+            letterElement.appendChild(nextButton);
+
+            // Show the button after 5 seconds
+            setTimeout(() => {
+                nextButton.style.display = 'inline-block'; // Make the button visible
+            }, 5000);
+        }
+
+        function createFinalQuestion() {
+            const proposal = document.createElement('div');
+            proposal.style.position = 'absolute';
+            proposal.style.top = '50%';
+            proposal.style.left = '50%';
+            proposal.style.transform = 'translate(-50%, -50%)';
+            proposal.style.textAlign = 'center';
+            proposal.innerHTML = `
+                <h1 style="color: #ff3366; font-size: 2.8em; margin-bottom: 40px;">
+                    Will you beeee myyyy valentineeeee,<br>myyy babyyyy? 💞
+                </h1>
+                <div style="display: flex; justify-content: center; gap: 20px;">
+                    <button id="yesBtn" style="
+                        background: #ff69b4; 
+                        color: white; 
+                        padding: 20px 50px; 
+                        border: none; 
+                        border-radius: 35px; 
+                        cursor: pointer; 
+                        font-size: 1.3em; 
+                        font-weight: bold; // Make text bold
+                        transition: box-shadow 0.3s ease; // Smooth transition for glow
+                    ">
+                        YESSSS FOREVER🌹
+                    </button>
+                    <button id="noBtn" style="
+                        background: #eee; 
+                        color: #666; 
+                        padding: 20px 50px; 
+                        border: none; 
+                        border-radius: 35px; 
+                        cursor: pointer; 
+                        font-size: 1.3em; 
+                        transition: 0.3s;
+                    ">
+                        NO ❌
+                    </button>
+                </div>
+                <div style="margin-top: 30px; color: #ff3366; font-size: 1.2em; font-style: italic;">
+                    You better say yes meri jaan :)
+                </div>
+            `;
+
+            // Glow effect on hover
+            const yesButton = proposal.querySelector('#yesBtn');
+            yesButton.onmouseover = () => {
+                yesButton.style.boxShadow = '0 0 20px rgba(255, 105, 180, 1), 0 0 30px rgba(255, 105, 180, 0.8)'; // Glow on hover
+            };
+            yesButton.onmouseout = () => {
+                yesButton.style.boxShadow = 'none'; // Remove glow
+            };
+
+            // Append the proposal to the container
+            container.appendChild(proposal);
+
+            // Button interactions
+            document.getElementById('noBtn').addEventListener('mouseover', function() {
+                anime({
+                    targets: this,
+                    translateX: anime.random(-150, 150),
+                    translateY: anime.random(-80, 80),
+                    duration: 600
+                });
+            });
+
+            document.getElementById('yesBtn').addEventListener('click', function() {
+                createHappyEnding();
+            });
+        }
+
+        function createHappyEnding() {
+            container.innerHTML = '';
+
+            const message = document.createElement('div');
+            message.innerHTML = `
+                <div id="typingText" style="
+                    text-align: center;
+                    color: #FF1493;
+                    font-size: 1.8em;
+                    line-height: 1.4;
+                    padding: 10px 20px;
+                    font-family: 'Pacifico', cursive;
+                    position: relative;  // Added for positioning
+                "></div>
+            `;
+
+            message.style.position = 'absolute';
+            message.style.width = '90%';  
+            message.style.left = '50%';
+            message.style.top = '10%';
+            message.style.transform = 'translateX(-50%)';
+
+            container.appendChild(message);
+
+            const words = [
+                'Zainuu', 'my', 'baby', 'thankyou', 'for', 'everything', 'you', 'do', 'for', 'us', "i'm", 'so', 'grateful', 'that', "you're", 'mine', 'meri', 'jaan.',
+                '<br>',
+                'Aapne', 'humare', 'liye', 'kitna', 'kuch', 'saha', 'hai', 'yeh', 'kabhi', 'nahi', 'bhulunga', 'mea', '<br>',
+                'i', 'wish', 'i', 'could', 'wrap', 'you', 'in', 'my', 'arms', 'and', 'tell', 'you', 'how', 'much', 'you', 'mean', 'to', 'me', '<br>',
+                'i', 'wanna', 'marry', 'you', 'asap', 'so', 'you', 'never', 'have', 'to', 'go', 'through', 'these', 'things', '<br>',
+                'coz', 'baby', 'you', 'deserve', 'so', 'much', 'love', 'and', "i'll", 'make', 'sure', 'to', 'give', 'you', 'all', 'my', 'love', '<br>',
+                'aurrrr', "you're", 'soooo', 'prettyyy', 'mashallah', 'meri', 'jaan', '<br>',
+                'like', "you're", 'beautiful', 'and', 'intelligent', 'smart', 'and', "you've", 'a', 'beautiful', 'soul', 'and', 'a', 'kind', 'heart', '<br>',
+                'jaani', 'everytime', 'i', 'see', 'you', 'i', 'wanna', 'kiss', 'you', 'hug', 'you','i', 'wanna', 'heal', 'your', 'inner', 'child', 'babyy', '<br>',
+                'your', 'heart', 'is', 'safe', 'with', 'me', 'i', 'promise', "i'll", 'always', 'love', 'you', 'Zainuu', '<br>',
+                'thankyou', 'so', 'much', 'for', 'being', 'such', 'an', 'amazing', 'aur', 'beautiful', 'cutuuu', 'wifeee', '<br>',
+                "i'm", 'so', 'proud', 'of', 'you', 'baby', 'for', 'being', 'so', 'strong', '<br>',
+                'and', "i'm", 'also', 'proud', 'of', 'you', 'for', 'studying', 'really', 'well', 'my', 'bestie', 'westie', '<br>',
+                'I', 'LOVE', 'YOU', 'SOO', 'MUCH', 'MERI', 'JAAAN', '💞', '🦋'
+            ];
+            
+            let currentWord = 0;
+            const typingInterval = setInterval(() => {
+                if (currentWord < words.length) {
+                    const typingText = document.getElementById('typingText');
+                    if (words[currentWord] === '<br>') {
+                        typingText.innerHTML += words[currentWord];
+                    } else {
+                        typingText.innerHTML += (currentWord > 0 && 
+                            !words[currentWord - 1].includes('<br>') ? ' ' : '') + 
+                            words[currentWord];
+                    }
+                    currentWord++;
+
+                    // Generate more hearts during typing
+                    for (let i = 0; i < 3; i++) { // Increase the number of hearts
+                        createHeart();
+                    }
+                } else {
+                    clearInterval(typingInterval);
+
+                    // Show the Next button after typing is complete
+                    showNextButton();
+                }
+            }, 300); // Adjust typing speed here
+
+            // Function to create and show the Next button
+            function showNextButton() {
+                const nextButton = document.createElement('button');
+                nextButton.textContent = 'Next✨'; // Use textContent to set the button text
+                nextButton.style.cssText = `
+                    background: #ff69b4; 
+                    color: white; 
+                    padding: 10px 20px; 
+                    border: none; 
+                    border-radius: 5px; 
+                    cursor: pointer; 
+                    font-size: 1em; 
+                    position: absolute;  // Changed to absolute positioning
+                    top: 100%;           // Positioned below the typing text
+                    right: 20px;         // Positioned on the right side
+                    z-index: 1000;       // Ensured it appears above other elements
+                    box-shadow: 0 0 10px rgba(255, 105, 180, 0.8), 0 0 20px rgba(255, 105, 180, 0.6); // Glow effect
+                    transition: box-shadow 0.3s ease; // Smooth transition for glow
+                `;
+                nextButton.onmouseover = () => {
+                    nextButton.style.boxShadow = '0 0 20px rgba(255, 105, 180, 1), 0 0 30px rgba(255, 105, 180, 0.8)'; // Glow on hover
+                };
+                nextButton.onmouseout = () => {
+                    nextButton.style.boxShadow = '0 0 10px rgba(255, 105, 180, 0.8), 0 0 20px rgba(255, 105, 180, 0.6)'; // Reset glow
+                };
+                nextButton.onclick = () => {
+                    // Hide typing text
+                    message.style.display = 'none';
+                    
+                    // Create and show the image
+                    showHugImage();
+                };
+
+                // Append the button to the message container
+                message.appendChild(nextButton);
+            }
+
+            // Function to create and animate hearts
+            function createHeart() {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.style.position = 'absolute';
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.top = `${Math.random() * 100}%`;
+                heart.style.fontSize = `${10 + Math.random() * 20}px`; // Random size
+                heart.style.opacity = '0.7';
+                heart.style.transition = 'transform 1s, opacity 1s';
+                container.appendChild(heart);
+
+                // Animate the heart
+                setTimeout(() => {
+                    heart.style.transform = `translateY(-100px)`;
+                    heart.style.opacity = '0'; // Fade out
+                }, 100);
+
+                // Remove heart after animation
+                setTimeout(() => {
+                    heart.remove();
+                }, 2000);
+            }
+        }
+
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.style.position = 'absolute';
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.fontSize = `${20 + Math.random() * 30}px`;
+            heart.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
+            heart.style.opacity = '0';
+            
+            container.appendChild(heart);
+
+            anime({
+                targets: heart,
+                opacity: [0, 0.8, 0],
+                translateY: ['100vh', '-100vh'],
+                rotate: anime.random(-360, 360),
+                duration: 10000 + Math.random() * 5000,
+                easing: 'linear',
+                loop: true,
+                complete: () => {
+                    // Call to show the final message after the animation
+                    showFinalMessage(); 
+                }
+            });
+        }
+
+        function toggleMusic() {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicBtn.innerHTML = '🎵';
+            } else {
+                bgMusic.play();
+                musicBtn.innerHTML = '⏸️';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Function to show the hug image and text after clicking Next
+        function showHugImage() {
+            const hugContainer = document.createElement('div');
+            hugContainer.style.position = 'absolute';
+            hugContainer.style.left = '50%';
+            hugContainer.style.top = '50%'; // Adjust position as needed
+            hugContainer.style.transform = 'translate(-50%, -50%)'; // Center the container
+            hugContainer.style.textAlign = 'center'; // Center the text
+
+            // Top text
+            const topText = document.createElement('div');
+            topText.innerHTML = 'mwahhhhh my babyyyy';
+            topText.style.color = '#FF1493'; // Text color
+            topText.style.fontSize = '4em'; // Font size
+            topText.style.marginBottom = '10px'; // Space between text and image
+
+            // Image
+            const image = document.createElement('img');
+            image.src = 'hug.png'; // Replace with your image URL
+            image.style.width = '500px'; // Adjust the size as needed
+            image.style.height = 'auto'; // Maintain aspect ratio
+
+            // Bottom text
+            const bottomText = document.createElement('div');
+            bottomText.innerHTML = 'i lovee youu soo muchh meri jaan';
+            bottomText.style.color = '#FF1493'; // Text color
+            bottomText.style.fontSize = '3em'; // Font size
+            bottomText.style.marginTop = '10px'; // Space between image and text
+
+            // Append elements to the hug container
+            hugContainer.appendChild(topText);
+            hugContainer.appendChild(image);
+            hugContainer.appendChild(bottomText);
+
+            // Append the hug container to the main container
+            container.appendChild(hugContainer);
+
+            // Start generating hearts
+            generateHearts();
+        }
+
+        function generateHearts() {
+            const emojis = ['❤️', '🌸', '💮']; // Heart and flower emojis
+            const colors = ['#ff69b4', '#ff3366', '#ff99c8', '#ffb347', '#ff6b6b'];
+            const heartCount = 15; // Increased number of hearts and flowers to generate
+
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = emojis[Math.floor(Math.random() * emojis.length)]; // Randomly choose an emoji
+                heart.style.position = 'absolute';
+                heart.style.fontSize = `${Math.random() * 20 + 10}px`; // Random size
+                heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+                heart.style.opacity = '0'; // Start as invisible
+                heart.style.left = `${Math.random() * 100}%`; // Random horizontal position
+                heart.style.top = '0'; // Start from the top
+                heart.style.transition = 'transform 4s ease-in-out, opacity 4s ease-in-out'; // Slower animation properties
+
+                container.appendChild(heart);
+
+                // Animate the heart with a falling effect
+                setTimeout(() => {
+                    heart.style.transform = `translateY(100vh) rotate(${Math.random() * 360}deg) scale(${Math.random() * 0.5 + 0.5})`; // Move down, rotate, and scale
+                    heart.style.opacity = '1'; // Fade in
+                }, 100);
+
+                // Remove heart after animation
+                setTimeout(() => {
+                    heart.remove();
+                }, 4000); // Match the duration of the animation
+            }
+
+            // Repeat heart generation every 1.5 seconds for a slower effect
+            setTimeout(generateHearts, 1500);
+        }
+    </script>
+</body>
+</html>
